@@ -1,39 +1,12 @@
-// this is an example of improting data from JSON
 import orders from '../data/orders.json';
 
 export default (function () {
   // create table headings
   const app = document.querySelector('#app');
-  const page = {
-    queue: [],
-    add: function (element) {
-      return this.queue.push(element);
-    },
-    delete: function (element) {
-      let index;
-      this.queue.forEach((item, i) => {
-        if (item === element) {
-          index = i;
-        }
-      });
-      this.queue.splice(index, 1);
-    },
-    renderAll: function () {
-      this.queue.forEach(item => document.append);
-    }
-
-  };
-  // const tableContainer = document.createElement('div');
-  // tableContainer.setAttribute('class', 'table-container');
-  const tableContainer = createElement('div', app, {class: 'table-container'});
-  // const table = document.createElement('table');
-  const table = createElement('table', tableContainer);
-  // const thead = document.createElement('thead');
-  const thead = createElement('thead', table);
-  // const tr = document.createElement('tr');
-  const tr = createElement('tr', thead);
-  // const tbody = document.createElement('tbody');
-  const tbody = createElement('tbody', table);
+  createElement('div', '#app', {class: 'table-container'});
+  createElement('table', '.table-container');
+  createElement('thead', 'table');
+  createElement('tr', 'thead');
   const tableHeadings = [
     'Transaction ID',
     'User Info',
@@ -43,61 +16,37 @@ export default (function () {
     'Card Type',
     'Location'
   ];
-  // tableHeadings.forEach(heading => {
-  //   let th = document.createElement('th')
-  //   th.textContent = heading;
-  //   tr.appendChild(th);
-  // });
   tableHeadings.forEach(heading => {
-    createElement('th', tr, {}, heading)
+    createElement('th', 'tr', {}, heading)
   });
-  // thead.appendChild(tr);
-  // table.appendChild(thead);
-
-  /*
+  createElement('tbody', 'table');
   orders.forEach(order => {
-    let orderRow = document.createElement('tr');
-    let orderId = `order_${order.id}`;
-    orderRow.setAttribute('id', orderId);
-    let transactionId = document.createElement('td'); 
-    transactionId.textContent = order.transaction_id;
-    orderRow.appendChild(transactionId);
-    let userData = document.createElement('td');
-    userData.textContent = order.user_id;
-    userData.setAttribute('class', 'user_data');
-    orderRow.appendChild(userData);
-    let createdAt = document.createElement('td');
-    createdAt.textContent = order.created_at;
-    orderRow.appendChild(createdAt);
-    let orderAmount = document.createElement('td');
-    orderAmount.textContent = `$${order.total}`;
-    orderRow.appendChild(orderAmount);
-    let cardNumber = document.createElement('td');
-    cardNumber.textContent = hideCardNumber(order.card_number);
-    orderRow.appendChild(orderAmount);
-   
-
-
-
-    tbody.appendChild(tr);
+    createOrderRow(order, 'tbody');
   });
-  table.appendChild(tbody);
-  tableContainer.appendChild(table);
-  app.appendChild(tableContainer);
 
-  */
-
-  // createElement('div', app, {class: 'hey-man'}, 'SUUUP');
-
-
-  function createElement(tagName, parent, attributes = {}, content = "") {
+  function createElement(tagName, parentSelector, attributes = {}, content = "") {
     let element = document.createElement(tagName);
-    // let parent = document.querySelector(parentSelector);
+    let parent = document.querySelector(parentSelector);
     for (let item in attributes) {
       element.setAttribute(item, attributes[item])
     }
     element.textContent = content;
     parent.appendChild(element);
+    // console.log(arguments);
+  }
+
+  function createOrderRow(order, parentSelector) {
+    let orderId = `#order_${order.id}`;
+    console.log()
+    createElement('tr', parentSelector, {id: `order_${order.id}`});
+      console.log(order.id);
+      createElement('td', orderId, {class: 'transaction-id'}, order.transaction_id);
+      createElement('td', orderId, {class: 'user-data'}, order.user_id);
+      createElement('td', orderId, {class: 'created-at'}, order.created_at);
+      createElement('td', orderId, {class: 'total'}, order.total);
+      createElement('td', orderId, {class: 'card-number'}, hideCardNumber(order.card_number));
+      createElement('td', orderId, {class: 'card-type'}, order.card_type);
+      createElement('td', orderId, {class: 'location'}, `${order.order_country} (${order.order_ip})`);
   }
 
 
@@ -113,10 +62,20 @@ export default (function () {
 //   "order_ip": "239.24.84.243"
 // }
 
-// function hideCardNumber (cardNumber) {
-//   return (typeof cardNumber === 'string' && cardNumber.length === 16 && cardNumber === /[0-9]+/) ? cardNumber.split().splice(2, 10, '**********').join(',') : null;
+function hideCardNumber (cardNumber) {
+  return (isString(cardNumber) && cardNumber.length === 16 && isNumber(parseInt(cardNumber))) ? hide(cardNumber) : null;
+}
 
-// }
+function isString(arg) {
+  return (typeof arg === 'string') || false;
+}
 
+function isNumber(arg) {
+  return (typeof num === 'number' && !isNaN(num)) || false;
+}
+
+function hide(arg) {
+  return arg.split().splice(2, 10, '**********').join(',')
+}
 
 }());
