@@ -37,9 +37,7 @@ export default (function () {
 
   function createOrderRow(order, parentSelector) {
     let orderId = `#order_${order.id}`;
-    console.log()
     createElement('tr', parentSelector, {id: `order_${order.id}`});
-      console.log(order.id);
       createElement('td', orderId, {class: 'transaction-id'}, order.transaction_id);
       createElement('td', orderId, {class: 'user-data'}, order.user_id);
       createElement('td', orderId, {class: 'created-at'}, order.created_at);
@@ -63,19 +61,7 @@ export default (function () {
 // }
 
 function hideCardNumber (cardNumber) {
-  return (isString(cardNumber) && cardNumber.length === 16 && isNumber(parseInt(cardNumber))) ? hide(cardNumber) : null;
-}
-
-function isString(arg) {
-  return (typeof arg === 'string') || false;
-}
-
-function isNumber(arg) {
-  return (typeof num === 'number' && !isNaN(num)) || false;
-}
-
-function hide(arg) {
-  return arg.split().splice(2, 10, '**********').join(',')
+  return cardNumber.toString().split('').map((char, i) => (i > 1 && i < cardNumber.length - 4) ? '*' : char).join('');
 }
 
 }());
