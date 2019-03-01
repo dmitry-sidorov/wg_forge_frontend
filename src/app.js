@@ -2,6 +2,8 @@ import orders from '../data/orders.json';
 import users from '../data/users.json';
 import createElement from './utils/createElement.js';
 import createOrderRow from './utils/createOrderRow.js';
+import addUserInfo from './utils/addUserInfo.js';
+import addUserDetails from './utils/addUserDetails.js';
 
 
 export default (function () {
@@ -28,31 +30,28 @@ export default (function () {
     createOrderRow(order, 'tbody');
   });
 
-  //fill user info
-  users.forEach(user => {
-    orders.forEach(order => {
-        if (user.id=== order.user_id) {
-          let gender = (user.gender === 'Male') ? 'Mr.' : 'Ms.';
-          let message = `${gender} ${user.first_name} ${user.last_name}`;
-          let link = document.createElement('a');
-          link.setAttribute('href', '#');
-          link.textContent = message;
-          let userData = document.querySelector(`#order_${order.id} .user-data`);
-          userData.textContent = '';
-          userData.appendChild(link);
-        }
+  //add user info
+  orders.forEach(order => {
+    users.forEach(user => {
+      addUserInfo(order, user);
+      addUserDetails(order, user);
     });
   });  
   
-  // orders.forEach(order => {
-  //   console.log(convertTimestamp(order.created_at));
+  // users.forEach(user => {
+    // addUserDetails(orders, user);
   // });
 
+  // users.forEach(user => {
+  //   orders.forEach(order => {
+  //     addUserInfo(order, user);
+  //     addUserDetails(order, user);
+  //   });
+  // }); 
+  
+//add user-details
 
 
-  // function addZero (num) {
-  //   return (num < 10) ? '0' + num : num.toString();
-  // }
 
 
 
