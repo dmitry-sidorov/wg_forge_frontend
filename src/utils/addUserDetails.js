@@ -27,7 +27,7 @@ export default function (order, user) {
         createElement('p', `${currentOrderId} .user-details`, {}, `Industry: ${currentCompany.industry} / ${currentCompany.sector}`);
       }
     }
-    
+ 
   }
 }
 

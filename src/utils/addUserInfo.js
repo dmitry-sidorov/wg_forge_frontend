@@ -6,6 +6,6 @@ export default function (order, user) {
   let gender = (user.gender === 'Male') ? 'Mr.' : 'Ms.';
   let message = `${gender} ${user.first_name} ${user.last_name}`;
   modifyElement(`#order_${order.id} .user-data`, {id: `user-id_${user.id}`}, '');
-  createElement('a', `#order_${order.id} .user-data`, {href: '#'}, message);
+  createElement('a', `#order_${order.id} .user-data`, {href: '#', class: 'user-link'}, message);
   }
 }
