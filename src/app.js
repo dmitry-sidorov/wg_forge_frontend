@@ -2,7 +2,7 @@ import orders from '../data/orders.json';
 import users from '../data/users.json';
 import createElement from './utils/createElement.js';
 import createOrderRow from './utils/createOrderRow.js';
-import convertTimestamp from './utils/convertTimestamp.js';
+
 
 export default (function () {
   // create table headings
@@ -35,6 +35,7 @@ export default (function () {
           let gender = (user.gender === 'Male') ? 'Mr.' : 'Ms.';
           let message = `${gender} ${user.first_name} ${user.last_name}`;
           let link = document.createElement('a');
+          link.setAttribute('href', '#');
           link.textContent = message;
           let userData = document.querySelector(`#order_${order.id} .user-data`);
           userData.textContent = '';
