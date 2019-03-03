@@ -3,7 +3,12 @@ import convertTimestamp from "./convertTimestamp";
 import companies from "../../data/companies.json";
 
 export default function (order, user) {
-  if (user.id === order.user_id) {
+  // if (user.id === order.user_id) {
+    // console.log('order: ', order);
+    // console.log('user: ', user);
+    // console.log('user.birthday: ', user.birthday);
+    // console.log('user.avatar: ', user.avatar);
+    // console.log('user.company_id: ', user.company_id);
     let currentOrderId = `#order_${order.id}`;
     createElement('div', `${currentOrderId} .user-data`, {class: 'user-details'});
     if (user.birthday !== null) {
@@ -23,10 +28,10 @@ export default function (order, user) {
         }
       });
       if (currentCompany.industry !== 'n/a' && currentCompany.sector !== 'n/a') {
-        createElement('a', `${currentOrderId} .company`, {href: currentCompany.url}, currentCompany.title);
+        createElement('a', `${currentOrderId} .company`, {href: currentCompany.url, target: '_blank'}, currentCompany.title);
         createElement('p', `${currentOrderId} .user-details`, {}, `Industry: ${currentCompany.industry} / ${currentCompany.sector}`);
       }
-    }
+    // }
  
   }
 }

@@ -3,7 +3,7 @@ import users from '../data/users.json';
 import createElement from './utils/createElement.js';
 import createOrderRow from './utils/createOrderRow.js';
 import addUserInfo from './utils/addUserInfo.js';
-import addUserDetails from './utils/addUserDetails.js';
+import renderUserDetails from './utils/renderUserDetails.js';
 
 
 export default (function () {
@@ -34,18 +34,23 @@ export default (function () {
   orders.forEach(order => {
     users.forEach(user => {
       addUserInfo(order, user);
-      addUserDetails(order, user);
+      // addUserDetails(order, user);
     });
   });  
 
 // add on-click listener
-const userDetails = document.querySelectorAll('.user-details');
-userDetails.style.display = 'none';
-const userLink = document.querySelector('.user-link');
-console.log('user-link', userLink);
-userLink.addEventListener('click', (e) => {
-  userDetails.style.display = 'block';
-  console.log('click', e);
+
+orders.forEach(order => {
+  let userLink = document.querySelector(`#order_${order.id} .user-link`);
+  let currentUser = users.filter(user => user.id === order.user_id)[0];
+
+  // console.log('order: ', order.id);
+  // console.log('user_ver.1: ', currentUser);
+  userLink.addEventListener('click', (e) => {
+    console.log(e);
+    renderUserDetails(order, currentUser);
+    // renderUserDetails(order, currentUser);
+  });
 });
 
 }());
