@@ -1,9 +1,10 @@
 import orders from '../data/orders.json';
 import users from '../data/users.json';
-import createElement from './utils/createElement.js';
-import createOrderRow from './utils/createOrderRow.js';
-import addUserInfo from './utils/addUserInfo.js';
-import renderUserDetails from './utils/renderUserDetails.js';
+import companies from '../data/companies.json';
+import createElement from './DOM/createElement.js';
+import createOrderRow from './orders/createRow.js';
+import addUserInfo from './users/addInfo.js';
+import renderUserDetails from './users/details/render.js';
 
 
 export default (function () {
@@ -48,7 +49,7 @@ orders.forEach(order => {
   // console.log('user_ver.1: ', currentUser);
   userLink.addEventListener('click', (e) => {
     console.log(e);
-    renderUserDetails(order, currentUser);
+    renderUserDetails(order, currentUser, companies);
     // renderUserDetails(order, currentUser);
   });
 });

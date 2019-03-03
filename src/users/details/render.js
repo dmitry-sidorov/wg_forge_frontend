@@ -1,11 +1,11 @@
-import addUserDetails from "./addUserDetails.js";
-import removeUserDetails from "./removeUserDetails.js";
+import createUserDetails from './create.js';
+import removeUserDetails from './remove.js';
 
-export default function (order, user) {
+export default function (order, user, companies) {
   let userDetails = document.querySelector(`#order_${order.id} .user-details`);
   console.log('user details block: ', userDetails);
   if (userDetails === null) {
-    addUserDetails(order, user);
+    createUserDetails(order, user, companies);
   } else {
     removeUserDetails(order);
   }

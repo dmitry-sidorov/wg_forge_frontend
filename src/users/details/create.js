@@ -1,8 +1,8 @@
-import createElement from "./createElement";
-import convertTimestamp from "./convertTimestamp";
-import companies from "../../data/companies.json";
+import createElement from "../../DOM/createElement";
+import convertTimestamp from "../../utils/convertTimestamp";
+// import companies from "src/data/companies.json";
 
-export default function (order, user) {
+export default function (order, user, companies) {
   // if (user.id === order.user_id) {
     // console.log('order: ', order);
     // console.log('user: ', user);

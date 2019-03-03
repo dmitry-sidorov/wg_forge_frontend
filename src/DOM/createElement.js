@@ -1,4 +1,4 @@
-export default function (tagName, parentSelector, attributes = {}, content = "") {
+export default function (tagName, parentSelector, attributes = {}, content = '') {
   let element = document.createElement(tagName);
   let parent = document.querySelector(parentSelector);
   for (let item in attributes) {
