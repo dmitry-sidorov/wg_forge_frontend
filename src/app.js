@@ -1,32 +1,33 @@
-import orders from '../data/orders.json';
+import defaultOrders from '../data/orders.json';
 import users from '../data/users.json';
 import companies from '../data/companies.json';
-import createElement from './DOM/createElement.js';
+import createDOMElement from './DOM/createElement.js';
 import createOrderRow from './orders/createRow.js';
 import addUserInfo from './users/addInfo.js';
 import renderUserDetails from './users/details/renderDetails.js';
 
+let orders = defaultOrders;
 
 export default (function () {
   // create table headings
   const app = document.querySelector('#app');
-  createElement('div', '#app', {class: 'table-container'});
-  createElement('table', '.table-container');
-  createElement('thead', 'table');
-  createElement('tr', 'thead');
+  createDOMElement('div', '#app', {class: 'table-container'});
+  createDOMElement('table', '.table-container');
+  createDOMElement('thead', 'table');
+  createDOMElement('tr', 'thead');
   const tableHeadings = [
-    'Transaction ID',
-    'User Info',
-    'Order Date',
-    'Order Amount',
-    'Card Number',
-    'Card Type',
-    'Location'
+    {content: 'Transaction ID', class: 'transaction-id'},
+    {content: 'User Info',  class: 'user-info'},
+    {content: 'Order Date', class: 'order-date'},
+    {content: 'Order Amount',  class: 'order-amount'},
+    {content: 'Card Number',  class: 'card-number'},
+    {content: 'Card Type', class: 'card-type'},
+    {content: 'Location', class: 'location'}
   ];
   tableHeadings.forEach(heading => {
-    createElement('th', 'tr', {}, heading)
+    createDOMElement('th', 'tr', {class: `${heading.class}`}, heading.content)
   });
-  createElement('tbody', 'table');
+  createDOMElement('tbody', 'table');
   orders.forEach(order => {
     createOrderRow(order, 'tbody');
   });
@@ -45,6 +46,15 @@ orders.forEach(order => {
   userLink.addEventListener('click', (e) => {
     renderUserDetails(order, currentUser, companies);
   });
+});
+
+//sort
+let filteredTableHeadings = tableHeadings.filter(heading => heading.class !== 'card-number');
+filteredTableHeadings.forEach(heading => {
+  let currentSelector = `thead .${heading.class}`;
+  let currentHeading = document.querySelector(currentSelector);
+  currentHeading.addEventListener('click', (e) => alert('BAM!'));
+  createDOMElement('span', currentSelector, {class: 'arrow'}, '&#8595');
 });
 
 }());
