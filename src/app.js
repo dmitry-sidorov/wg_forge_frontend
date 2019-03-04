@@ -6,6 +6,7 @@ import createOrderRow from './orders/createRow.js';
 import addUserInfo from './users/addInfo.js';
 import renderUserDetails from './users/details/renderDetails.js';
 import createSpecChar from './DOM/createSpecChar.js';
+import sortingController from './sorting/sortingController.js';
 
 let orders = defaultOrders;
 
@@ -20,8 +21,8 @@ export default (function () {
 
 
   createDOMElement('div', '#app', {class: 'table-container'});
-  createDOMElement('table', '.table-container', {class: 'table table-light table-hover table-sm'});
-  createDOMElement('thead', 'table');
+  createDOMElement('table', '.table-container', {class: 'table table-light table-striped table-sm'});
+  createDOMElement('thead', 'table', {class: 'table-dark'});
   createDOMElement('tr', 'thead');
   const tableHeadings = [
     {content: 'Transaction ID', class: 'transaction-id'},
@@ -33,9 +34,9 @@ export default (function () {
     {content: 'Location', class: 'location'}
   ];
   tableHeadings.forEach(heading => {
-    createDOMElement('th', 'tr', {class: `${heading.class} table-dark`}, heading.content)
+    createDOMElement('th', 'tr', {class: `${heading.class}`}, heading.content)
   });
-  createDOMElement('tbody', 'table', {class: ''});
+  createDOMElement('tbody', 'table');
   orders.forEach(order => {
     createOrderRow(order, 'tbody');
   });
@@ -57,12 +58,20 @@ orders.forEach(order => {
 });
 
 //sort
-let filteredTableHeadings = tableHeadings.filter(heading => heading.class !== 'card-number');
-filteredTableHeadings.forEach(heading => {
+let filteredHeadings = tableHeadings.filter(heading => heading.class !== 'card-number');
+filteredHeadings.forEach(heading => {
   let currentSelector = `thead .${heading.class}`;
   let currentHeading = document.querySelector(currentSelector);
   currentHeading.addEventListener('click', (e) => {
-    createSpecChar('span', currentSelector, {class: 'arrow'}, '&#8595');
+    let spanExists = currentHeading.querySelector('.arrow');
+    if (spanExists === null) {
+      createSpecChar('span', currentSelector, {class: 'arrow'}, '&#8595');
+      sortingController(heading.class);
+    } else {
+      let arrow = currentHeading.querySelector('.arrow');
+      currentHeading.removeChild(arrow);
+      sortingController(heading.class);
+    }
   });
 });
 
