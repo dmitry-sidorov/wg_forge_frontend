@@ -5,14 +5,22 @@ import createDOMElement from './DOM/createElement.js';
 import createOrderRow from './orders/createRow.js';
 import addUserInfo from './users/addInfo.js';
 import renderUserDetails from './users/details/renderDetails.js';
+import createSpecChar from './DOM/createSpecChar.js';
 
 let orders = defaultOrders;
 
 export default (function () {
   // create table headings
   const app = document.querySelector('#app');
+  // createSpecChar('div', '#app', {}, '&#8595');
+
+  // const arrow = document.createElement('div');
+  // arrow.innerHTML = '&#8595';
+  // app.appendChild(arrow);
+
+
   createDOMElement('div', '#app', {class: 'table-container'});
-  createDOMElement('table', '.table-container');
+  createDOMElement('table', '.table-container', {class: 'table table-light table-hover table-sm'});
   createDOMElement('thead', 'table');
   createDOMElement('tr', 'thead');
   const tableHeadings = [
@@ -25,9 +33,9 @@ export default (function () {
     {content: 'Location', class: 'location'}
   ];
   tableHeadings.forEach(heading => {
-    createDOMElement('th', 'tr', {class: `${heading.class}`}, heading.content)
+    createDOMElement('th', 'tr', {class: `${heading.class} table-dark`}, heading.content)
   });
-  createDOMElement('tbody', 'table');
+  createDOMElement('tbody', 'table', {class: ''});
   orders.forEach(order => {
     createOrderRow(order, 'tbody');
   });
@@ -53,8 +61,9 @@ let filteredTableHeadings = tableHeadings.filter(heading => heading.class !== 'c
 filteredTableHeadings.forEach(heading => {
   let currentSelector = `thead .${heading.class}`;
   let currentHeading = document.querySelector(currentSelector);
-  currentHeading.addEventListener('click', (e) => alert('BAM!'));
-  createDOMElement('span', currentSelector, {class: 'arrow'}, '&#8595');
+  currentHeading.addEventListener('click', (e) => {
+    createSpecChar('span', currentSelector, {class: 'arrow'}, '&#8595');
+  });
 });
 
 }());

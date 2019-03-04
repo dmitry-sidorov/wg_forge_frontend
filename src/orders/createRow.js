@@ -4,7 +4,7 @@ import convertTimestamp from '../utils/convertTimestamp.js';
 
 export default function (order, parentSelector) {
   let orderId = `#order_${order.id}`;
-  createDOMElement('tr', parentSelector, { id: `order_${order.id}` });
+  createDOMElement('tr', parentSelector, {id: `order_${order.id}`});
   createDOMElement('td', orderId, { class: 'transaction-id' }, order.transaction_id);
   createDOMElement('td', orderId, { class: 'user-data' }, order.user_id);
   createDOMElement('td', orderId, { class: 'created-at' }, convertTimestamp(order.created_at));
