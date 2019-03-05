@@ -1,5 +1,5 @@
 import createDOMElement from "../DOM/createElement";
-import createOrderRow from "./createRow";
+import renderTableBody from "./renderTableBody";
 
 export default function (orders, parentSelector, tableHeadings) {
   createDOMElement('div', parentSelector, { class: 'table-container' });
@@ -9,8 +9,5 @@ export default function (orders, parentSelector, tableHeadings) {
   tableHeadings.forEach(heading => {
     createDOMElement('th', 'tr', { class: `${heading.class}` }, heading.content)
   });
-  createDOMElement('tbody', 'table');
-  orders.forEach(order => {
-    createOrderRow(order, 'tbody');
-  });
+  renderTableBody(orders, 'table');
 }
