@@ -6,10 +6,60 @@ import renderUserDetails from './users/details/renderDetails.js';
 import createSpecChar from './DOM/createSpecChar.js';
 import renderSorting from './sorting/renderSorting.js';
 import createTable from './orders/createTable.js';
+import sortBy from './sorting/sortBy.js';
+import sortString from './sorting/sortString.js';
+import model from './orders/ordersModel.js';
 
-let orders = defaultOrders;
 
 export default (function () {
+
+Array.prototype.sortBy = sortBy;
+
+const ordersModel = model(defaultOrders);
+
+// const ordersModel = {
+//   orders: [],
+//   isSorted: null,
+//   sortedOrders: [],
+//   setOrders: function (orders) {
+//     this.orders = orders;
+//   },
+//   getOrders: function () {
+//     return (this.isSorted == null) ? this.orders : this.sortedOrders;
+//   },
+//   setSorting: function (prop, sortFunction) {
+//     // this.sortedOrders = this.orders.slice();
+//     this.sortedOrders = this.orders.slice().sortBy(prop, sortFunction);
+//     this.isSorted = 'prop';
+//   },
+//   resetSorting: function () {
+//     this.sortedOrders = [];
+//     this.isSorted = null;
+//   }
+// }
+
+
+
+
+// ordersModel.setOrders(defaultOrders);
+// console.log(ordersModel.getOrders());
+console.log('init: ', ordersModel);
+ordersModel.setSorting('card_type', sortString );
+// console.log('setSorting(): ', ordersModel);
+ordersModel.resetSorting();
+// console.log('resetSorting(): ', ordersModel);
+
+
+let orders = ordersModel.getOrders();
+
+
+
+
+
+
+
+
+
   // create table headings
   // const app = document.querySelector('#app');
   const tableHeadings = [
