@@ -1,36 +1,32 @@
-import defaultOrders from '../data/orders.json';
-import users from '../data/users.json';
-import companies from '../data/companies.json';
-import addUserInfo from './users/addInfo.js';
-import renderUserDetails from './users/details/renderDetails.js';
-import createSpecChar from './DOM/createSpecChar.js';
-import sortBy from './sorting/sortBy.js';
-import sortString from './sorting/sortString.js';
-import model from './orders/ordersModel.js';
-import controller from './orders/ordersController.js';
-import createTable from './orders/createTable.js';
-import renderTableBody from './orders/renderTableBody.js';
+import Model from "./components/model";
+import Controller from "./components/controller";
+import View from "./components/view";
 
 export default (function () {
+  //init
+  const model = Model();
+  const controller = Controller(model);
+  const view = View(controller);
+  console.log(model.getExtendedOrders());
+  view.createTable(model.getOrders(), '#app', model.getTableHeadings());
 
-Array.prototype.sortBy = sortBy;
 
-const ordersModel = model(defaultOrders);
+// const ordersModel = model(defaultOrders);
 
 
 // ordersModel.setOrders(defaultOrders);
 // console.log(ordersModel.getOrders());
-console.log('init: ', ordersModel);
-ordersModel.setSorting('card_type', sortString );
+// console.log('init: ', ordersModel);
+// ordersModel.setSorting('card_type', sortString );
 // console.log('setSorting(): ', ordersModel);
-ordersModel.resetSorting();
+// ordersModel.resetSorting();
 // console.log('resetSorting(): ', ordersModel);
 
 
-let orders = ordersModel.getOrders();
+// let orders = ordersModel.getOrders();
 
 
-const ordersController = controller(ordersModel);
+// const ordersController = controller(ordersModel, true);
 
 
 
@@ -39,17 +35,11 @@ const ordersController = controller(ordersModel);
 
   // create table headings
   // const app = document.querySelector('#app');
-  const tableHeadings = [
-    { content: 'Transaction ID', class: 'transaction-id' },
-    { content: 'User Info', class: 'user-info' },
-    { content: 'Order Date', class: 'order-date' },
-    { content: 'Order Amount', class: 'order-amount' },
-    { content: 'Card Number', class: 'card-number' },
-    { content: 'Card Type', class: 'card-type' },
-    { content: 'Location', class: 'location' }
-  ];
+
+
 
   //sort
+/*
   createTable(orders, '#app', tableHeadings);
   const cardTypeHeading = document.querySelector('thead .card-type');
   console.log('card_type single: ', cardTypeHeading);
@@ -58,7 +48,7 @@ const ordersController = controller(ordersModel);
     orders = ordersModel.getOrders();
     renderTableBody(orders);
   });
-
+*/
   //add user info and details
   // orders.forEach(order => {
   //   users.forEach(user => {
@@ -67,6 +57,7 @@ const ordersController = controller(ordersModel);
   // });  
 
 // add on-click listener
+/*
 orders.forEach(order => {
   let userLink = document.querySelector(`#order_${order.id} .user-link`);
   let currentUser = users.filter(user => user.id === order.user_id)[0];
@@ -74,11 +65,12 @@ orders.forEach(order => {
     renderUserDetails(order, currentUser, companies);
   });
 });
-
+*/
 //sort
+/*
 let sortingState = null;
 let filteredHeadings = tableHeadings.filter(heading => heading.class !== 'card-number');
-
+*/
 /*
 filteredHeadings.forEach(heading => {
   let currentSelector = `thead .${heading.class}`;
