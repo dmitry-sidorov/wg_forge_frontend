@@ -9,5 +9,5 @@ export default function (orders, parentSelector, tableHeadings) {
   tableHeadings.forEach(heading => {
     $createDOMElement('th', 'tr', { class: `${heading.class}` }, heading.content)
   });
-  $renderTableBody(orders, 'table');
+  $renderTableBody(orders);
 }

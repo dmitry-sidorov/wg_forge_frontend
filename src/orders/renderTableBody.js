@@ -1,7 +1,8 @@
 import $createOrderRow from "./createRow";
 import $createDOMElement from "../DOM/createElement";
+import $onClickUserData from "./onClickUserData";
 
-export default function (orders) {
+export default function (orders, controller) {
   let tbody  = document.querySelector('tbody');
   let table = document.querySelector('table');
   if (tbody !== null) {
@@ -10,5 +11,6 @@ export default function (orders) {
   $createDOMElement('tbody', 'table');
   orders.forEach(order => {
     $createOrderRow(order, 'tbody');
+    $onClickUserData(order, controller);
   });
 }

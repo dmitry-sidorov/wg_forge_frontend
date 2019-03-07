@@ -1,5 +1,6 @@
 import $createTable from "../orders/createTable";
 import $renderTableBody from "../orders/renderTableBody";
+import $onClickUserData from "../orders/onClickUserData";
 
 export default function (controller) { 
   const sayHi = () => {
@@ -10,6 +11,11 @@ export default function (controller) {
   }
   const updateTable = (orders, selector, headings) => {
     $renderTableBody(orders);
+    $onClickUserData(order, controller);
   }
-  return { sayHi, createTable, updateTable };
+  const onClick = (targetSelector) => {
+    let target = document.querySelector(targetSelector);
+    target.addEventListener('click', (e) => controller.handleEvent(e)); 
+  }
+  return { sayHi, createTable, updateTable, onClick};
 }

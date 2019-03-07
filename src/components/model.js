@@ -25,7 +25,7 @@ export default function () {
   }
   
   const getTableHeadings = () => tableHeadings;
-  return { sayHi, getTableHeadings, subscribe, initialize, print }
+  return { sayHi, getExtendedOrders, getTableHeadings, subscribe, initialize, print }
 }
 
 
