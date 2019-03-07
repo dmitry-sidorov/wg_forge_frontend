@@ -1,5 +1,5 @@
-import createOrderRow from "./createRow";
-import createDOMElement from "../DOM/createElement";
+import $createOrderRow from "./createRow";
+import $createDOMElement from "../DOM/createElement";
 
 export default function (orders) {
   let tbody  = document.querySelector('tbody');
@@ -7,8 +7,8 @@ export default function (orders) {
   if (tbody !== null) {
     table.removeChild(tbody);
   }
-  createDOMElement('tbody', 'table');
+  $createDOMElement('tbody', 'table');
   orders.forEach(order => {
-    createOrderRow(order, 'tbody');
+    $createOrderRow(order, 'tbody');
   });
 }

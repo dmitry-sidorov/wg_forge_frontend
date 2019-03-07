@@ -7,8 +7,10 @@ export default (function () {
   const model = Model();
   const controller = Controller(model);
   const view = View(controller);
-  console.log(model.getExtendedOrders());
-  view.createTable(model.getOrders(), '#app', model.getTableHeadings());
+  model.subscribe(view);
+  model.print();
+  model.initialize();
+  
 
 
 // const ordersModel = model(defaultOrders);

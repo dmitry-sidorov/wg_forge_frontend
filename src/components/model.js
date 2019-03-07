@@ -3,27 +3,29 @@ import users from "../../data/users.json";
 import orders from "../../data/orders.json";
 import companies from "../../data/companies.json";
 import tableHeadings from "../orders/tableHeadings.js"
+import cloneObject from "../utils/cloneObject.js";
 
 export default function () {
-  const extendedOrders = orders.slice();
-  
+  const extendedOrders = orders.clone();
+  const observers = [];
+  const print = () => console.log('orders: ', orders, 'extended orders: ', extendedOrders);
+  const initialize = () => observers.forEach(observer => {
+    observer.createTable(getExtendedOrders(), '#app', tableHeadings);
+  });
+  const subscribe = (observer) => observers.push(observer);
   const sayHi = () => console.log('Hi! Model is here! ', this);
-  const getOrders = () => orders;
+  
   const getExtendedOrders = () => {
-    extendedOrders.forEach(order => {
-      users.forEach(user => {
-        if (user.id == order.user_id) {
-          let gender = (user.gender === 'Male') ? 'Mr.' : 'Ms.';
-          // console.log('gender: ', gender);
-          order.user_data = `${gender} ${user.first_name} ${user.last_name}`;
-          // console.log('order:', order);
-        }
-      });
+    return extendedOrders.map(order => {
+      let user = users.filter(user => user.id == order.user_id)[0];
+      let gender = (user.gender === 'Male') ? 'Mr.' : 'Ms.';
+      order.user_data = `${gender} ${user.first_name} ${user.last_name}`;
+      return order;
     });
-    return extendedOrders;
-  };
+  }
+  
   const getTableHeadings = () => tableHeadings;
-  return { sayHi, getOrders, getExtendedOrders, getTableHeadings }
+  return { sayHi, getTableHeadings, subscribe, initialize, print }
 }
 
 
