@@ -29,9 +29,21 @@ export default function () {
     let userDetails = {};
     users.forEach(user => {
       if (userId === user.id) {
-        userDetails.user_id = userId;
-        userDetails.birthday = user.birthday;
-        userDetails.avatar = user.avatar;
+        userDetails = {
+          user_id: user.id,
+          birthday:user.birthday,
+          avatar:user.avatar
+        };
+        companies.forEach(company => {
+          if (user.company_id === company.id) {
+            userDetails.company = {
+              title: company.title,
+              url: company.url,
+              industry: company.industry,
+              sector: company.sector
+            };
+          }
+        });
       }
     });
     return userDetails;

@@ -13,8 +13,4 @@ export default function (order, parentSelector, controller) {
   $createDOMElement('td', orderId, { class: 'card-number' }, hideCardNumber(order.card_number));
   $createDOMElement('td', orderId, { class: 'card-type' }, order.card_type);
   $createDOMElement('td', orderId, { class: 'location' }, `${order.order_country} (${order.order_ip})`);
-  // let userData = document.querySelector(`${orderId} .user-link`);
-  // userData.addEventListener('click', () => {
-    // console.log(controller.getUserDetails());
-  // });
 }
