@@ -10,8 +10,10 @@ export default (function () {
   model.subscribe(view);
   model.print();
   model.initialize();
-  let orders = model.getExtendedOrders();
-  console.log('orders app: ', orders);
+  // let orders = model.getExtendedOrders();
+  // console.log('orders app: ', orders);
+
+  
   // orders.forEach(order => {
   //   let tgt = document.querySelector(`#order_${order.id} .user-data`);
   //   tgt.addEventListener('click', e => console.log(order));

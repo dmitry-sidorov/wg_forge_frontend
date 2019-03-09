@@ -11,6 +11,8 @@ export default function (orders, controller) {
   $createDOMElement('tbody', 'table');
   orders.forEach(order => {
     $createOrderRow(order, 'tbody');
-    $onClickUserData(order, controller);
+    // console.log(order);
+    // $onClickUserData(order, controller);
   });
+  orders.forEach(order => $onClickUserData(order, controller));
 }

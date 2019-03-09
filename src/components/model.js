@@ -3,10 +3,10 @@ import users from "../../data/users.json";
 import orders from "../../data/orders.json";
 import companies from "../../data/companies.json";
 import tableHeadings from "../orders/tableHeadings.js"
-import cloneObject from "../utils/cloneObject.js";
+import deepCopy from "../utils/deepCopy.js";
 
 export default function () {
-  const extendedOrders = orders.clone();
+  const extendedOrders = deepCopy(orders);
   const observers = [];
   const print = () => console.log('orders: ', orders, 'extended orders: ', extendedOrders);
   const initialize = () => observers.forEach(observer => {
@@ -25,9 +25,20 @@ export default function () {
   }
   
   const getTableHeadings = () => tableHeadings;
-  return { sayHi, getExtendedOrders, getTableHeadings, subscribe, initialize, print }
-}
+  const getUserDetails = (userId) => {
+    let userDetails = {};
+    users.forEach(user => {
+      if (userId === user.id) {
+        userDetails.user_id = userId;
+        userDetails.birthday = user.birthday;
+        userDetails.avatar = user.avatar;
+      }
+    });
+    return userDetails;
+  };
 
+  return { sayHi, getExtendedOrders, getTableHeadings, getUserDetails, subscribe, initialize, print }
+}
 
 
 

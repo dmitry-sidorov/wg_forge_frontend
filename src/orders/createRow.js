@@ -2,7 +2,7 @@ import $createDOMElement from '../DOM/createElement.js';
 import hideCardNumber from '../utils/hideCardNumber.js';
 import convertTimestamp from '../utils/convertTimestamp.js';
 
-export default function (order, parentSelector) {
+export default function (order, parentSelector, controller) {
   let orderId = `#order_${order.id}`;
   $createDOMElement('tr', parentSelector, {id: `order_${order.id}`});
   $createDOMElement('td', orderId, { class: 'transaction-id' }, order.transaction_id);
@@ -13,4 +13,8 @@ export default function (order, parentSelector) {
   $createDOMElement('td', orderId, { class: 'card-number' }, hideCardNumber(order.card_number));
   $createDOMElement('td', orderId, { class: 'card-type' }, order.card_type);
   $createDOMElement('td', orderId, { class: 'location' }, `${order.order_country} (${order.order_ip})`);
+  // let userData = document.querySelector(`${orderId} .user-link`);
+  // userData.addEventListener('click', () => {
+    // console.log(controller.getUserDetails());
+  // });
 }
