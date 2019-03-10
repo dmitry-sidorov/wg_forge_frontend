@@ -7,6 +7,7 @@ import orders from "../../data/orders.json";
 import companies from "../../data/companies.json";
 import tableHeadings from "../orders/tableHeadings.js"
 import deepCopy from "../utils/deepCopy.js";
+import calculateMedian from "../utils/calculateMedian";
 
 export default function () {
   const extendedOrders = deepCopy(orders);
@@ -18,6 +19,43 @@ export default function () {
   const updateTable = (orders) => observers.forEach(observer => {
     observer.renderTableBody(orders);
   });
+
+  const getStats = (orders) => {
+    const stats = {};
+    stats.count = orders.length;
+    stats.total = orders.reduce((acc, order) => {
+      return acc + parseFloat(order.total);
+    }, 0.0).toFixed(2);
+    stats.average = (stats.total / stats.count).toFixed(2);
+    let prices = orders.map(order => order.total);
+    console.log('prices: ', prices);
+    stats.median = calculateMedian(prices);
+    let ordersWithGender = deepCopy(orders);
+    ordersWithGender.forEach(order => {
+      users.forEach(user => {
+        if (user.id === order.user_id) {
+          order.gender = user.gender;
+        }
+      });
+    });
+    let femaleOrders = ordersWithGender.filter(order => {
+      return order.gender.toLowerCase() === 'female';
+    });
+    let femalePrices = femaleOrders.map(order => order.total).reduce((acc, price) => {
+      return acc + parseFloat(price);
+    }, 0.0);
+    let femaleAmount = femaleOrders.length;
+    stats.averageFemale = (femalePrices / femaleAmount).toFixed(2);
+    let maleOrders = ordersWithGender.filter(order => {
+      return order.gender.toLowerCase() === 'male';
+    });
+    let malePrices = maleOrders.map(order => order.total).reduce((acc, price) => {
+      return acc + parseFloat(price);
+    }, 0.0);
+    let maleAmount = maleOrders.length;
+    stats.averageMale = (malePrices / maleAmount).toFixed(2);
+    return stats;
+  }
 
   const renderSorting = (heading) => {
     if (heading === null) {
@@ -103,7 +141,8 @@ export default function () {
     subscribe,
     initialize,
     print,
-    renderSorting
+    renderSorting,
+    getStats
   }
 }
 

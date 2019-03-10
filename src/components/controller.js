@@ -16,5 +16,9 @@ export default function (model) {
     }
   }
 
-  return { sayHi, getUserDetails, handleSorting }
+  const getStats = (orders) => {
+    return model.getStats(orders);
+  }
+
+  return { sayHi, getUserDetails, handleSorting, getStats }
 }

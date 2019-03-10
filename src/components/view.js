@@ -2,8 +2,28 @@ import $createDOMElement from "../DOM/createElement";
 import $createOrderRow from "../orders/createRow";
 import renderDetails from "../userDetails/renderDetails";
 import $createSpecChar from "../DOM/createSpecChar";
+import $createStatsTable from "../orders/createStatsTable";
 
 export default function (controller) { 
+
+  const renderTableBody = (orders) => {
+    let tbody = document.querySelector('tbody');
+    let table = document.querySelector('table');
+    if (tbody !== null) {
+      table.removeChild(tbody);
+    }
+    $createDOMElement('tbody', 'table');
+    orders.forEach(order => {
+      $createOrderRow(order, 'tbody');
+      onClickUserData(order);
+    });
+    createStats(orders);
+  }
+
+  const createStats = (orders) => {
+    let stats = controller.getStats(orders);
+    $createStatsTable(stats);
+  }
 
   const createArrow = (headingSelector) => {
     removeArrows();
@@ -18,7 +38,7 @@ export default function (controller) {
     }
   }
 
-  const createTableHead = (orders, parentSelector, tableHeadings) => {
+  const createTableHead = (parentSelector, tableHeadings) => {
     $createDOMElement('div', parentSelector, { class: 'table-container' });
     $createDOMElement('table', '.table-container', { class: 'table table-light table-striped table-sm table-bordered' });
     $createDOMElement('thead', 'table', { class: 'table-dark' });
@@ -44,8 +64,9 @@ export default function (controller) {
 
 
   const createTable = (orders, selector, headings) => {
-    createTableHead(orders, selector, headings);
+    createTableHead(selector, headings);
     renderTableBody(orders);
+    // createStats(orders);
   }
 
   const onClickUserData = (order) => {
@@ -53,19 +74,6 @@ export default function (controller) {
     userData.addEventListener('click', () => {
       let userDetails = controller.getUserDetails(order.user_id);
       renderDetails(order, userDetails);
-    });
-  }
-
-  const renderTableBody = (orders) => {
-    let tbody = document.querySelector('tbody');
-    let table = document.querySelector('table');
-    if (tbody !== null) {
-      table.removeChild(tbody);
-    }
-    $createDOMElement('tbody', 'table');
-    orders.forEach(order => {
-      $createOrderRow(order, 'tbody');
-      onClickUserData(order);
     });
   }
 
