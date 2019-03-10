@@ -1,6 +1,5 @@
 export default function (model) {
   let sortingState = null;
-  const sayHi = () => console.log('Hi! Controller is here! ');
   const getUserDetails = (userId) => {
     return model.getUserDetails(userId);
   }; 
@@ -22,5 +21,5 @@ export default function (model) {
 
   const addSearch = (queue) => model.addSearch(queue); 
 
-  return { sayHi, getUserDetails, handleSorting, getStats, addSearch }
+  return { getUserDetails, handleSorting, getStats, addSearch }
 }

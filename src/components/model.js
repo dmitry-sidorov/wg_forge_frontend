@@ -104,8 +104,8 @@ export default function () {
     } else {
       updateTable(getSortedOrders(heading));
     }
-
   }
+
   const subscribe = (observer) => observers.push(observer);
 
   const getSortingFunction = (prop) => {
@@ -122,8 +122,7 @@ export default function () {
     const property = heading.replace(/-/, '_');
     sortedOrders.sort(getSortingFunction(property));
     if (property === 'location') {
-      sortedOrders.sort(sortString('order_country'))
-                  .sort(sortIP('order_ip'));
+      sortedOrders.sort(sortString('order_country')).sort(sortIP('order_ip'));
     }
     return sortedOrders;
   }
