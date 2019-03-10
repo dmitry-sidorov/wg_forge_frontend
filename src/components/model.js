@@ -1,4 +1,7 @@
-// import sortBy from "../sorting/sortBy";
+import sortString from "../sorting/sortString";
+import sortFloat from "../sorting/sortFloat";
+import sortInteger from "../sorting/sortInteger";
+import sortIP from "../sorting/sortIP";
 import users from "../../data/users.json";
 import orders from "../../data/orders.json";
 import companies from "../../data/companies.json";
@@ -12,9 +15,51 @@ export default function () {
   const initialize = () => observers.forEach(observer => {
     observer.createTable(getExtendedOrders(), '#app', tableHeadings);
   });
+  const updateTable = (orders) => observers.forEach(observer => {
+    observer.renderTableBody(orders);
+  });
+
+  const renderSorting = (heading) => {
+    if (heading === null) {
+      updateTable(extendedOrders);
+    } else {
+      updateTable(getSortedOrders(heading));
+    }
+
+  }
   const subscribe = (observer) => observers.push(observer);
   const sayHi = () => console.log('Hi! Model is here! ', this);
-  
+
+  const getSortingFunction = (prop) => {
+    // const headings = [
+    //   { content: 'Transaction ID', class: 'transaction-id' },
+    //   { content: 'User Info', class: 'user-info' },
+    //   { content: 'Order Date', class: 'order-date' },
+    //   { content: 'Order Amount', class: 'order-amount' },
+    //   { content: 'Card Number', class: 'card-number' },
+    //   { content: 'Card Type', class: 'card-type' },
+    //   { content: 'Location', class: 'location' }
+    // ];
+    const floatProps = ['order_amount'];
+    const stringProps = ['transaction_id', 'card_type'];
+    console.log('prop: ', prop);
+    if (stringProps.includes(prop)) return sortString(prop);
+    if (prop === 'user_info') return sortString('user_data');
+    if (floatProps.includes(prop)) return sortFloat('total');
+    if (prop === 'order_date') return sortInteger('created_at');
+  }
+
+  const getSortedOrders = (heading) => {
+    const sortedOrders = deepCopy(extendedOrders);
+    const property = heading.replace(/-/, '_');
+    sortedOrders.sort(getSortingFunction(property));
+    if (property === 'location') {
+      sortedOrders.sort(sortIP('order_ip'));
+    }
+    console.log('sorted orders: ', sortedOrders);
+    return sortedOrders;
+  }
+
   const getExtendedOrders = () => {
     return extendedOrders.map(order => {
       let user = users.filter(user => user.id == order.user_id)[0];
@@ -49,7 +94,16 @@ export default function () {
     return userDetails;
   };
 
-  return { sayHi, getExtendedOrders, getTableHeadings, getUserDetails, subscribe, initialize, print }
+  return { 
+    sayHi,
+    getExtendedOrders,
+    getTableHeadings,
+    getUserDetails,
+    subscribe,
+    initialize,
+    print,
+    renderSorting
+  }
 }
 
 

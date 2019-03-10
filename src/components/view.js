@@ -1,15 +1,47 @@
-import $createTable from "../orders/createTable";
 import $createDOMElement from "../DOM/createElement";
 import $createOrderRow from "../orders/createRow";
 import renderDetails from "../userDetails/renderDetails";
+import $createSpecChar from "../DOM/createSpecChar";
 
 export default function (controller) { 
-  const sayHi = () => {
-    console.log('Hi! View is here!', this);
+
+  const createArrow = (headingSelector) => {
+    $createSpecChar('span', `.${headingSelector}`, { class: 'arrow' }, '  &#8595');
   }
 
+  const removeArrow = (headingSelector) => {
+    let arrow = document.querySelector(`.${headingSelector} .arrow`);
+    let parrent = document.querySelector(`.${headingSelector}`);
+    console.log('arrow: ', arrow);
+    parrent.removeChild(arrow);
+  }
+
+  const createTableHead = (orders, parentSelector, tableHeadings) => {
+    $createDOMElement('div', parentSelector, { class: 'table-container' });
+    $createDOMElement('table', '.table-container', { class: 'table table-light table-striped table-sm table-bordered' });
+    $createDOMElement('thead', 'table', { class: 'table-dark' });
+    $createDOMElement('tr', 'thead');
+    tableHeadings.forEach(heading => {
+      console.log(heading);
+      $createDOMElement('th', 'tr', { class: `${heading.class}` }, heading.content);
+      if (heading.class !== 'card-number') {
+        let selector = document.querySelector(`.${heading.class}`);
+        selector.addEventListener('click', () => {
+          let arrowCreated = controller.handleSorting(heading.class);
+          if (!arrowCreated) {
+            createArrow(heading.class);
+          } else {
+            removeArrow(heading.class);
+          }
+        });
+      }
+    });
+  }
+
+
+
   const createTable = (orders, selector, headings) => {
-    $createTable(orders, selector, headings);
+    createTableHead(orders, selector, headings);
     renderTableBody(orders);
   }
 
@@ -34,5 +66,5 @@ export default function (controller) {
     });
   }
 
-  return { sayHi, createTable };
+  return { createTable, renderTableBody };
 }
