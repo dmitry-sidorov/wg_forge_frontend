@@ -5,14 +5,14 @@ import sortIP from "../sorting/sortIP";
 import users from "../../data/users.json";
 import orders from "../../data/orders.json";
 import companies from "../../data/companies.json";
-import tableHeadings from "../orders/tableHeadings.js"
+import tableHeadings from "../table/tableHeadings.js"
 import deepCopy from "../utils/deepCopy.js";
 import calculateMedian from "../utils/calculateMedian";
+import convertTimestamp from "../utils/convertTimestamp";
 
 export default function () {
   const extendedOrders = deepCopy(orders);
   const observers = [];
-  const print = () => console.log('orders: ', orders, 'extended orders: ', extendedOrders);
   const initialize = () => observers.forEach(observer => {
     observer.createTable(getExtendedOrders(), '#app', tableHeadings);
   });
@@ -20,16 +20,55 @@ export default function () {
     observer.renderTableBody(orders);
   });
 
+  const addSearch = (queue) => {
+    const searchOrders = deepCopy(extendedOrders);
+    const searchedIndecies = [];
+    let searched = [];
+    let reg = new RegExp(queue, 'g');
+    searchOrders.forEach(order => {
+      if (order['user_data'].toLowerCase().search(reg) !== -1) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      }
+      if (order['transaction_id'].toLowerCase().search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      } 
+      if (convertTimestamp(order['created_at']).search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      } 
+      if (order['total'].toString().search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      }
+      if (order['card_type'].search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      } 
+      if (order['order_ip'].search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      } 
+      if (order['order_country'].toLowerCase().search(reg) !== -1 && !searchedIndecies.includes(order.id)) {
+        searched.push(order);
+        searchedIndecies.push(order.id);
+      } 
+    });
+    return searched;
+  }
+
   const getStats = (orders) => {
     const stats = {};
     stats.count = orders.length;
     stats.total = orders.reduce((acc, order) => {
       return acc + parseFloat(order.total);
     }, 0.0).toFixed(2);
-    stats.average = (stats.total / stats.count).toFixed(2);
+    let average = (stats.total / stats.count).toFixed(2);
+    stats.average = (!isNaN(average)) ? average : 'n/a';
     let prices = orders.map(order => order.total);
-    console.log('prices: ', prices);
-    stats.median = calculateMedian(prices);
+    let median = calculateMedian(prices);
+    stats.median = (!isNaN(median)) ? median : 'n/a';
     let ordersWithGender = deepCopy(orders);
     ordersWithGender.forEach(order => {
       users.forEach(user => {
@@ -45,7 +84,8 @@ export default function () {
       return acc + parseFloat(price);
     }, 0.0);
     let femaleAmount = femaleOrders.length;
-    stats.averageFemale = (femalePrices / femaleAmount).toFixed(2);
+    let averageFemale = (femalePrices / femaleAmount).toFixed(2);
+    stats.averageFemale = (!isNaN(averageFemale)) ? averageFemale : 'n/a';
     let maleOrders = ordersWithGender.filter(order => {
       return order.gender.toLowerCase() === 'male';
     });
@@ -53,7 +93,8 @@ export default function () {
       return acc + parseFloat(price);
     }, 0.0);
     let maleAmount = maleOrders.length;
-    stats.averageMale = (malePrices / maleAmount).toFixed(2);
+    let averageMale = (malePrices / maleAmount).toFixed(2);
+    stats.averageMale = (!isNaN(averageMale)) ? averageMale : 'n/a';
     return stats;
   }
 
@@ -66,21 +107,10 @@ export default function () {
 
   }
   const subscribe = (observer) => observers.push(observer);
-  const sayHi = () => console.log('Hi! Model is here! ', this);
 
   const getSortingFunction = (prop) => {
-    // const headings = [
-    //   { content: 'Transaction ID', class: 'transaction-id' },
-    //   { content: 'User Info', class: 'user-info' },
-    //   { content: 'Order Date', class: 'order-date' },
-    //   { content: 'Order Amount', class: 'order-amount' },
-    //   { content: 'Card Number', class: 'card-number' },
-    //   { content: 'Card Type', class: 'card-type' },
-    //   { content: 'Location', class: 'location' }
-    // ];
     const floatProps = ['order_amount'];
     const stringProps = ['transaction_id', 'card_type'];
-    console.log('prop: ', prop);
     if (stringProps.includes(prop)) return sortString(prop);
     if (prop === 'user_info') return sortString('user_data');
     if (floatProps.includes(prop)) return sortFloat('total');
@@ -95,7 +125,6 @@ export default function () {
       sortedOrders.sort(sortString('order_country'))
                   .sort(sortIP('order_ip'));
     }
-    console.log('sorted orders: ', sortedOrders);
     return sortedOrders;
   }
 
@@ -134,63 +163,13 @@ export default function () {
   };
 
   return { 
-    sayHi,
     getExtendedOrders,
     getTableHeadings,
     getUserDetails,
     subscribe,
     initialize,
-    print,
     renderSorting,
-    getStats
+    getStats,
+    addSearch
   }
 }
-
-
-
-/*
-model.prototype.getOrders = function () {
-  return (this.isSorted == null) ? this.orders : this.sortedOrders;
-};
-model.prototype.setSorting = function (prop, sortFunction) {
-  prop = prop.replace(/-/, '_');
-  this.sortedOrders = this.orders.slice().sortBy(prop, sortFunction);
-  this.isSorted = prop;
-  console.log(this);
-};
-model.prototype.resetSorting = function () {
-  this.sortedOrders = [];
-  this.isSorted = null;
-};
-
-export { model }
-*/
-
-/*
-export default function (orders) {
-  Array.prototype.sortBy = sortBy;
-  return {
-    orders: orders,
-    isSorted: null,
-    sortedOrders: [],
-    setOrders: function (orders) {
-      this.orders = orders;
-    },
-    getOrders: function () {
-      return (this.isSorted == null) ? this.orders : this.sortedOrders;
-    },
-    setSorting: function (prop, sortFunction) {
-      // this.sortedOrders = this.orders.slice();
-      prop = prop.replace(/-/, '_');
-      this.sortedOrders = this.orders.slice().sortBy(prop, sortFunction);
-      this.isSorted = prop;
-      console.log(this);
-    },
-    resetSorting: function () {
-      this.sortedOrders = [];
-      this.isSorted = null;
-    }
-  };
-} 
-
-*/

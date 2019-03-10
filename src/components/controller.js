@@ -20,5 +20,7 @@ export default function (model) {
     return model.getStats(orders);
   }
 
-  return { sayHi, getUserDetails, handleSorting, getStats }
+  const addSearch = (queue) => model.addSearch(queue); 
+
+  return { sayHi, getUserDetails, handleSorting, getStats, addSearch }
 }
