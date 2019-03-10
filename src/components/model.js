@@ -54,7 +54,8 @@ export default function () {
     const property = heading.replace(/-/, '_');
     sortedOrders.sort(getSortingFunction(property));
     if (property === 'location') {
-      sortedOrders.sort(sortIP('order_ip'));
+      sortedOrders.sort(sortString('order_country'))
+                  .sort(sortIP('order_ip'));
     }
     console.log('sorted orders: ', sortedOrders);
     return sortedOrders;

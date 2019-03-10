@@ -6,14 +6,16 @@ import $createSpecChar from "../DOM/createSpecChar";
 export default function (controller) { 
 
   const createArrow = (headingSelector) => {
+    removeArrows();
     $createSpecChar('span', `.${headingSelector}`, { class: 'arrow' }, '  &#8595');
   }
 
-  const removeArrow = (headingSelector) => {
-    let arrow = document.querySelector(`.${headingSelector} .arrow`);
-    let parrent = document.querySelector(`.${headingSelector}`);
-    console.log('arrow: ', arrow);
-    parrent.removeChild(arrow);
+  const removeArrows = () => {
+    let arrow = document.querySelector('.arrow');
+    if (arrow !== null) {
+      let parent = arrow.parentElement;
+      parent.removeChild(arrow);
+    }
   }
 
   const createTableHead = (orders, parentSelector, tableHeadings) => {
@@ -26,12 +28,13 @@ export default function (controller) {
       $createDOMElement('th', 'tr', { class: `${heading.class}` }, heading.content);
       if (heading.class !== 'card-number') {
         let selector = document.querySelector(`.${heading.class}`);
+        // selector.style.cssText = `th: {cursor: pointer}`;
         selector.addEventListener('click', () => {
           let arrowCreated = controller.handleSorting(heading.class);
           if (!arrowCreated) {
             createArrow(heading.class);
           } else {
-            removeArrow(heading.class);
+            removeArrows();
           }
         });
       }
